@@ -7,4 +7,5 @@ git push
 git push origin edge
 # gh release delete edge -y
 # gh release create edge --notes "latest release"
-gh release upload edge */*.pkg.tar.xz rs-extras.db
+gh release upload edge */*.pkg.tar.xz
+gh release upload edge rs-extras.db --clobber

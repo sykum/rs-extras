@@ -3,7 +3,6 @@
 pkgname=rockchip-mpp
 pkgver=1.0.11
 pkgrel=2
-epoch=1
 pkgdesc='Rockchip Media Process Platform (MPP)'
 arch=('aarch64')
 # https://github.com/HermanChen/mpp/issues/71

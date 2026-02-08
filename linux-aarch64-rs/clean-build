@@ -1,0 +1,13 @@
+#!/bin/bash
+rm -rf pkg src *.pkg.tar.xz *.zip *.zip.part
+
+updpkgsums
+MAKEFLAGS='-j12' makepkg --nobuild
+cp src/linux-rs-patches-*/.config config
+
+updpkgsums
+git add PKGBUILD config
+git commit -m "chore: update config + pkg sums"
+MAKEFLAGS='-j12' makepkg
+
+rm -rf pkg src *.zip *.zip.part

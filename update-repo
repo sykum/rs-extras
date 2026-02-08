@@ -1,0 +1,10 @@
+repo-add rs-extras.db.tar.xz */*.pkg.tar.xz
+
+git tag --delete edge
+git push --delete origin edge
+git tag edge
+git push
+git push origin edge
+# gh release delete edge -y
+# gh release create edge --notes "latest release"
+gh release upload edge */*.pkg.tar.xz rs-extras.db

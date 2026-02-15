@@ -9,17 +9,17 @@ pkgname=(
   "${pkgbase}"
   "${pkgbase}-headers"
 )
-_srcname=linux-rs-patches-6.18
+_srcname=linux-rs-patches-6.19
 _kernelname=${pkgbase#linux}
 _desc="AArch64 rockchip"
-pkgver=6.18.10
+pkgver=6.19.0
 pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
 license=('GPL-2.0-only')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git' 'uboot-tools' 'vboot-utils' 'dtc' 'python')
 options=('!strip')
-source=("https://github.com/sykum/linux/archive/refs/heads/rs-patches-6.18.zip"
+source=("https://github.com/sykum/linux/archive/refs/heads/rs-patches-6.19.zip"
         'config'
         'linux.preset')
 sha256sums=('5dfa66e4f01ec7f36d19841c2267fadb899dcdaf9bbacac0616116aa62dfd53a'

@@ -22,8 +22,8 @@ options=('!strip')
 source=("https://github.com/sykum/linux/archive/refs/heads/rs-patches-6.19.zip"
         'config'
         'linux.preset')
-sha256sums=('5dfa66e4f01ec7f36d19841c2267fadb899dcdaf9bbacac0616116aa62dfd53a'
-            '6a20a495259d0d2288a1d1dca65e9d5bda58fe5c74573705bccb6e6c6b149e8e'
+sha256sums=('9d782043af9e0bf7039603a487abce21a8c67c215f4b162fe054860cf3b29235'
+            '2fe4095c107637f0940a3db096eb2cd027c6bb5620a9cec06e62d680d18f7c03'
             'ec409dd9079403969e26c55d942082ec8a4889d5652cbf873b3a52f5d3d23b2c')
 
 prepare() {

@@ -7,7 +7,7 @@ cp src/linux-rs-patches-*/.config config
 
 updpkgsums
 git add PKGBUILD config
-git commit -m "chore: update config + pkg sums"
+git commit -m "chore: update config, pkg, sums"
 MAKEFLAGS='-j12' makepkg
 
 rm -rf pkg src *.zip *.zip.part

@@ -12,7 +12,7 @@ pkgname=(
 _srcname=linux-rs-patches-6.19
 _kernelname=${pkgbase#linux}
 _desc="AArch64 rockchip"
-pkgver=6.19.0
+pkgver=6.19.3
 pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
@@ -22,8 +22,8 @@ options=('!strip')
 source=("https://github.com/sykum/linux/archive/refs/heads/rs-patches-6.19.zip"
         'config'
         'linux.preset')
-sha256sums=('9d782043af9e0bf7039603a487abce21a8c67c215f4b162fe054860cf3b29235'
-            '2fe4095c107637f0940a3db096eb2cd027c6bb5620a9cec06e62d680d18f7c03'
+sha256sums=('f461dbbf9dfcaf69a26b54e931552acd639de44ef468fe19935a230620c9dbaf'
+            'f8d99e3c6693444f1440639b7bc2ed5e3f1e251aae64f0be21f79bc8ac0a44c2'
             'ec409dd9079403969e26c55d942082ec8a4889d5652cbf873b3a52f5d3d23b2c')
 
 prepare() {

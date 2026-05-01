@@ -1,8 +1,6 @@
 name: Build Arch ARM64 Native
 
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
 
 # Berechtigungen für das Hochladen in die Registry

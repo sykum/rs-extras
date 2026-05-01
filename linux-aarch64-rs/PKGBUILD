@@ -12,7 +12,7 @@ pkgname=(
 _srcname=linux-rs-patches-7.0
 _kernelname=${pkgbase#linux}
 _desc="AArch64 rockchip"
-pkgver=7.0.2
+pkgver=7.0.3
 pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
@@ -22,8 +22,8 @@ options=('!strip')
 source=("https://github.com/sykum/linux/archive/refs/heads/rs-patches-7.0.zip"
         'config'
         'linux.preset')
-sha256sums=('ac0aed6922e2808674045d12d9ff644889a8c2a5673e83a20c8ee2365d384905'
-            '26ac9153d588cc2576e04a67cc86482aac36a16f1388aea858a7a6bf42c99b90'
+sha256sums=('d8b2584689c5a367f85241d514a29e01c93b3ae40820b36d77a5d9394aba692f'
+            '8bd09ee644b21279cf5b6ca8c88eb99200ef3bb5243eedac77da378558edac39'
             'ec409dd9079403969e26c55d942082ec8a4889d5652cbf873b3a52f5d3d23b2c')
 
 prepare() {

@@ -1,0 +1,199 @@
+# / AArch64 multi-platform
+# Maintainer: Kevin Mihelich <kevin@archlinuxarm.org>
+# Maintainer: graysky <therealgraysky AT proton DOT me>
+
+buildarch=8
+
+pkgbase=linux-aarch64-x1e-rs
+pkgname=(
+  "${pkgbase}"
+  "${pkgbase}-headers"
+)
+pkgver=7.3.3
+pkgrel=1
+_srcname=linux-${pkgver}
+_kernelname=${pkgbase#linux}
+_desc="AArch64 Qualcomm Snapdragon X Elite (x1e)"
+arch=('aarch64')
+url="https://www.kernel.org/"
+license=('GPL-2.0-only')
+makedepends=(
+  'bc'
+  'cpio'
+  'dtc'
+  'gettext'
+  'git'
+  'inetutils'
+  'kmod'
+  'libelf'
+  'openssl'
+  'perl'
+  'python'
+  'tar'
+  'xz'
+  'zstd'
+)
+options=('!strip')
+source=("https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-${pkgver}.tar.xz"
+        'config'
+        'linux.preset')
+sha256sums=('79c66dde66cd96877fcde8f7d36aec946b1f423d2b97b5a7b1751b75c764f3d1'
+            '47d9161086f3a70a357e4c7493490659cf3c7e721ce386ba0ad0e47a81959f51'
+            '3ef737ce197944b3971b7b2e6553ee76d2116e26d0d86eea2690b80a3ff3ca3e')
+
+prepare() {
+  cd "${_srcname}"
+
+  echo "Setting version..."
+  echo "-$pkgrel" > localversion.10-pkgrel
+  echo "${pkgbase#linux}" > localversion.20-pkgname
+
+  local src
+  for src in "${source[@]}"; do
+    src="${src%%::*}"
+    src="${src##*/}"
+    [[ $src = *.patch ]] || continue
+    echo "Applying patch $src..."
+    patch -Np1 < "../$src"
+  done
+
+  echo "Setting config..."
+  if [[ -s "${srcdir}/config" ]]; then
+    cp "${srcdir}/config" ./.config
+    make olddefconfig
+    diff -u "${srcdir}/config" .config || :
+  else
+    make defconfig
+  fi
+
+  make -s kernelrelease > version
+  echo "Prepared $pkgbase version $(<version)"
+}
+
+build() {
+  cd "${_srcname}"
+
+  unset LDFLAGS
+  make ${MAKEFLAGS} Image modules
+  make ${MAKEFLAGS} DTC_FLAGS="-@" dtbs
+}
+
+package_linux-aarch64-x1e-rs() {
+  pkgdesc="The Linux Kernel and modules - ${_desc}"
+  depends=(
+    'coreutils'
+    'initramfs'
+    'kmod'
+  )
+  optdepends=(
+    'linux-firmware: firmware images needed for some devices'
+    'wireless-regdb: to set the correct wireless channels of your country'
+  )
+  provides=(
+    "linux=${pkgver}"
+    'KSMBD-MODULE'
+    'VIRTUALBOX-GUEST-MODULES'
+    'WIREGUARD-MODULE'
+  )
+  conflicts=('linux')
+  backup=("etc/mkinitcpio.d/${pkgbase}.preset")
+  install=${pkgname}.install
+
+  cd "${_srcname}"
+  local kernver="$(<version)"
+  local modulesdir="$pkgdir/usr/lib/modules/$kernver"
+
+  echo "Installing boot image (vmlinuz for UKI) and dtbs..."
+  # systemd/mkinitcpio expects the kernel image at $modulesdir/vmlinuz
+  install -Dm644 arch/arm64/boot/Image "$modulesdir/vmlinuz"
+
+  # Used by mkinitcpio to name the kernel
+  echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
+
+  echo "Installing DTBs..."
+  make INSTALL_DTBS_PATH="${pkgdir}/boot/dtbs" dtbs_install
+
+  echo "Installing modules..."
+  ZSTD_CLEVEL=19 make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
+    DEPMOD=/doesnt/exist modules_install
+
+  # remove build link
+  rm -f "$modulesdir"/build
+
+  # sed expression for following substitutions
+  local _subst="
+    s|%PKGBASE%|${pkgbase}|g
+    s|%KERNVER%|${kernver}|g
+  "
+
+  # install mkinitcpio preset file for UKI
+  sed "${_subst}" ../linux.preset |
+    install -Dm644 /dev/stdin "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
+}
+
+package_linux-aarch64-x1e-rs-headers() {
+  pkgdesc="Header files and scripts for building modules for linux kernel - ${_desc}"
+  provides=("linux-headers=${pkgver}")
+  conflicts=('linux-headers')
+
+  cd "${_srcname}"
+  local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
+
+  echo "Installing build files..."
+  install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
+    localversion.* version vmlinux
+  install -Dt "$builddir/kernel" -m644 kernel/Makefile
+  install -Dt "$builddir/arch/arm64" -m644 arch/arm64/Makefile
+  cp -t "$builddir" -a scripts
+
+  if [[ -f tools/objtool/objtool ]]; then
+    install -Dt "$builddir/tools/objtool" -m755 tools/objtool/objtool
+  fi
+  if [[ -f tools/bpf/resolve_btfids/resolve_btfids ]]; then
+    install -Dt "$builddir/tools/bpf/resolve_btfids" -m755 tools/bpf/resolve_btfids/resolve_btfids
+  fi
+
+  echo "Installing headers..."
+  cp -t "$builddir" -a include
+  cp -t "$builddir/arch/arm64" -a arch/arm64/include
+  install -Dt "$builddir/arch/arm64/kernel" -m644 arch/arm64/kernel/asm-offsets.s
+
+  echo "Installing KConfig files..."
+  find . -name 'Kconfig*' -exec install -Dm644 {} "$builddir/{}" \;
+
+  echo "Removing unneeded architectures..."
+  local arch
+  for arch in "$builddir"/arch/*/; do
+    [[ $arch = */arm64/ ]] && continue
+    echo "Removing $(basename "$arch")"
+    rm -r "$arch"
+  done
+
+  echo "Removing broken symlinks..."
+  find -L "$builddir" -type l -printf 'Removing %P\n' -delete
+
+  echo "Removing loose objects..."
+  find "$builddir" -type f -name '*.o' -printf 'Removing %P\n' -delete
+
+  echo "Stripping build tools..."
+  local file
+  while read -rd '' file; do
+    case "$(file -bi "$file")" in
+      application/x-sharedlib\;*)      # Libraries (.so)
+        strip -v $STRIP_SHARED "$file" ;;
+      application/x-archive\;*)        # Libraries (.a)
+        strip -v $STRIP_STATIC "$file" ;;
+      application/x-executable\;*)     # Binaries
+        strip -v $STRIP_BINARIES "$file" ;;
+      application/x-pie-executable\;*) # Relocatable binaries
+        strip -v $STRIP_SHARED "$file" ;;
+    esac
+  done < <(find "$builddir" -type f -perm -u+x ! -name vmlinux -print0)
+
+  echo "Stripping vmlinux..."
+  strip -v $STRIP_STATIC "$builddir/vmlinux"
+
+  echo "Adding symlink..."
+  mkdir -p "$pkgdir/usr/src"
+  ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
+}

@@ -10,4 +10,4 @@ git add PKGBUILD config
 git commit -m "chore: update config, pkg, sums"
 MAKEFLAGS='-j12' makepkg
 
-rm -rf pkg src *.tar.xz *.tar.xz.part
+# rm -rf pkg src *.tar.xz *.tar.xz.part

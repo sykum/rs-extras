@@ -38,7 +38,7 @@ source=("https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-${pkgver}.tar.xz"
         'config'
         'linux.preset')
 sha256sums=('b11b6df8295e8e991ff040b71aaa4994a8b55caa23b6b092907f195b5840fd1f'
-            'f69209a6ed2cf06150eb9015610075376a949e2c425a93d149f6f480e62fd7c4'
+            '15439aa2205b11fce81d985f36c0ce60d4e1cb1bbeac2e520733fba652799409'
             '3ef737ce197944b3971b7b2e6553ee76d2116e26d0d86eea2690b80a3ff3ca3e')
 
 prepare() {

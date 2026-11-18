@@ -38,7 +38,7 @@ source=("https://github.com/sykum/linux/archive/refs/heads/x1e-7.3.zip"
         'config'
         'linux.preset')
 sha256sums=('3e364d366000929663dca5fe7c401315f82a9da135209afbb6d50d572da2dc79'
-            'ed9b6dc29a7afe0e54f53fa1c6f51718ce093c40ff7c7af5d9181355dcd87165'
+            '592ef450f9b552d7331d88f546b0ac650cf1b2a6440710a6c2493b8f964d6064'
             '3ef737ce197944b3971b7b2e6553ee76d2116e26d0d86eea2690b80a3ff3ca3e')
 
 prepare() {

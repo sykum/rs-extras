@@ -37,8 +37,8 @@ options=('!strip')
 source=("https://github.com/sykum/linux/archive/refs/heads/x1e-7.3.zip"
         'config'
         'linux.preset')
-sha256sums=('ae71818fcf952b7770914b6a26bbf2f10128376adda37357fbb36e588648cc0c'
-            '30499545a6b5be6db9c19792443a0107e128a93bbbd55336f125aa3dbaeb48be'
+sha256sums=('3e364d366000929663dca5fe7c401315f82a9da135209afbb6d50d572da2dc79'
+            'ed9b6dc29a7afe0e54f53fa1c6f51718ce093c40ff7c7af5d9181355dcd87165'
             '3ef737ce197944b3971b7b2e6553ee76d2116e26d0d86eea2690b80a3ff3ca3e')
 
 prepare() {

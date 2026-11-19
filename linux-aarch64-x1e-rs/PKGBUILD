@@ -10,7 +10,7 @@ pkgname=(
   "${pkgbase}-headers"
 )
 pkgver=7.3.5
-pkgrel=2
+pkgrel=3
 _srcname=linux-x1e-7.3 #${pkgver}
 _kernelname=${pkgbase#linux}
 _desc="AArch64 Qualcomm Snapdragon X Elite (x1e)"
@@ -37,7 +37,7 @@ options=('!strip')
 source=("https://github.com/sykum/linux/archive/refs/heads/x1e-7.3.zip"
         'config'
         'linux.preset')
-sha256sums=('9693e8ff9dc732e242d71d8f8a1737311a9838a9e0d5b65bd31497e5102d77a2'
+sha256sums=('eb6bd56a33dbd24c328bc80176808fd26336fe1b24673e1ad07c0df12ba4c8b4'
             '592ef450f9b552d7331d88f546b0ac650cf1b2a6440710a6c2493b8f964d6064'
             '3ef737ce197944b3971b7b2e6553ee76d2116e26d0d86eea2690b80a3ff3ca3e')
 

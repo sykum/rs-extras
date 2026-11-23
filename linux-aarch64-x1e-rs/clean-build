@@ -1,5 +1,5 @@
 #!/bin/bash
-rm -rf pkg src *.pkg.tar.xz *.tar.xz *.tar.xz.part
+rm -rf pkg src *.pkg.tar.xz *.zip *.zip.part
 
 updpkgsums
 MAKEFLAGS='-j12' makepkg --nobuild
@@ -10,4 +10,4 @@ git add PKGBUILD config
 git commit -m "chore: update config, pkg, sums"
 MAKEFLAGS='-j12' makepkg
 
-# rm -rf pkg src *.tar.xz *.tar.xz.part
+rm -rf pkg src *.zip *.zip.part

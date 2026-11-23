@@ -1,0 +1,8 @@
+#!/bin/bash
+rm -rf pkg src *.pkg.tar.*
+
+updpkgsums
+makepkg --printsrcinfo > .SRCINFO
+makepkg -sc
+
+rm -rf pkg src

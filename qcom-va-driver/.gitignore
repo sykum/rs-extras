@@ -1,0 +1,5 @@
+qcom-va-driver/
+pkg/
+src/
+*.tar.gz
+*.pkg.tar.*
